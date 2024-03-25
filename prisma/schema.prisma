@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId    String  @unique
+  email      String  @unique
+  first_name String
+  last_name  String?
+  username   String
+  image_url  String
+
+  event Event[]
+  order Order[]
+}
+
+model Event {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId  String   @db.ObjectId
+  userId      String   @db.ObjectId
+  title       String
+  description String
+  location    String
+  isOnline    Boolean
+  imageUrl    String
+  isFree      Boolean  @default(false)
+  price       String
+  startTime   DateTime @default(now())
+  endTime     DateTime @default(now())
+  url         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category  Category @relation("CategoryToEvent", fields: [categoryId], references: [id], onDelete: Cascade)
+  organizer User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Order[]
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  event     Event[]  @relation("CategoryToEvent")
+}
+
+model Order {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  buyerId     String   @db.ObjectId
+  stripeId    String   @unique
+  eventId     String   @db.ObjectId
+  totalAmount String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User  @relation(fields: [buyerId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
