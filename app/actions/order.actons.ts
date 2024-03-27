@@ -29,7 +29,7 @@ export const checkoutOrder = async (order: CheckoutOrderProps) => {
                 buyerId: order.buyerId
             },
             mode: "payment",
-            success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
+            success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}profile`,
             cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}`,
         })
         // redirect(session.url!)
@@ -105,13 +105,16 @@ export const getOrdersByEvent = async ({ searchText, eventId }: GetOrdersByEvent
     try {
         if (!eventId) throw new Error("Event Id is required")
 
-        const searchOrders = await prismaDb.event.findRaw({
-            filter: { title: { $regex: searchText } }, options: {
-                $options: ""
+
+        const searchOrders = await prismaDb.order.findRaw({
+            filter: {id: { $regex: searchText } }, options: {
+                $options: "i"
             }
         })
-        const ordersQuery = await prisma?.order.findMany({
+        console.log(searchOrders)
 
+  
+        const ordersQuery = await prisma?.order.findMany({
             where: {
                 eventId
             },
@@ -124,7 +127,8 @@ export const getOrdersByEvent = async ({ searchText, eventId }: GetOrdersByEvent
                 user: {
                     select: {
                         first_name: true,
-                        last_name: true
+                        last_name: true,
+                        email:true
                     }
                 }
             },
