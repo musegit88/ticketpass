@@ -8,7 +8,7 @@ const Hero = () => {
       <section className="max-w-7xl lg:mx-auto p-5 xl:px-0 w-full ">
         <div className="flex flex-col-reverse items-center gap-4 md:flex md:flex-row justify-center">
           <div className="flex-1 flex flex-col justify-center gap-5">
-            <h1 className="font-bold  text-2xl sm:text-4xl">
+            <h1 className="font-bold  text-2xl sm:text-3xl md:text-4xl">
               Unlock Knowledge, Empower Growth: Discover Educational Events with
               TicketPass!
             </h1>
