@@ -29,6 +29,13 @@ export const getUserById = async (userId: string) => {
         const user = await prismaDb.user.findUnique({
             where: {
                 id: userId
+            },
+            include:{
+                order:{
+                    select:{
+                        eventId:true
+                    }
+                }
             }
         })
         if (!user) throw new Error("User not found")
