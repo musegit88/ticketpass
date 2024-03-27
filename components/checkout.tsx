@@ -1,10 +1,16 @@
 import { EventProps } from "@/types/types";
 import { Button } from "./ui/button";
-import { TicketPlus } from "lucide-react";
+import { Ticket, TicketPlus } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import React from "react";
 import { checkoutOrder } from "@/app/actions/order.actons";
 import { useRouter } from "next/navigation";
+
+type CheckoutProps = {
+  event:EventProps
+  hasTicket:boolean
+  userId:string
+}
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -12,7 +18,7 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-const Checkout = ({ event, userId }: { event: EventProps; userId: string }) => {
+const Checkout = ({ event, hasTicket,userId}:CheckoutProps) => {
   
   const router = useRouter()
   React.useEffect(() => {
@@ -30,6 +36,9 @@ const Checkout = ({ event, userId }: { event: EventProps; userId: string }) => {
   }, []);
 
   const handleCheckout = async () => {
+    if(hasTicket){
+      return;
+    }
     const order = {
       eventTitle: event.title,
       eventId: event.id,
@@ -44,9 +53,10 @@ const Checkout = ({ event, userId }: { event: EventProps; userId: string }) => {
 
   return (
     <form action={handleCheckout} method="post">
-      <Button type="submit" role="link" className="flex items-center gap-2">
-        <TicketPlus />
-        <p>{event.isFree ? "Get Ticket" : "Buy Ticket"}</p>
+      <Button type="submit" role="link" disabled={hasTicket}>
+        {hasTicket ? <span className="flex items-center gap-2"><Ticket/><p>You have ticket for this event</p></span> : <span className="flex items-center gap-2"><TicketPlus />
+        <p>{event.isFree ? "Get Ticket" : "Buy Ticket"}</p></span>}
+        
       </Button>
     </form>
   );
