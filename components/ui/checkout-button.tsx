@@ -6,7 +6,12 @@ import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Checkout from "../checkout";
 import { UserRound } from "lucide-react";
 
-const CheckoutButton = ({ event }: { event: EventProps }) => {
+type CheckoutButtonProps = {
+  event:EventProps
+  hasTicket:boolean
+}
+
+const CheckoutButton = ({ event ,hasTicket}:CheckoutButtonProps) => {
   const { user } = useUser();
   const userId = user?.publicMetadata.userId as string;
   const hasEventEnded = new Date(event.endTime) < new Date();
@@ -36,7 +41,7 @@ const CheckoutButton = ({ event }: { event: EventProps }) => {
             </div>
           </SignedOut>
           <SignedIn>
-            <Checkout event={event} userId={userId} />
+            <Checkout event={event} userId={userId} hasTicket={hasTicket}/>
           </SignedIn>
         </>
       )}

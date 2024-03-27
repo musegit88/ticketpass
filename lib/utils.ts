@@ -42,3 +42,10 @@ export const removeKeysFromUrlQuery = ({ params, keysToRemove }: RemoveUrlQueryP
     query: currentUrl,
   });
 };
+
+export const truncate = (str:string,maxLength:number) => {
+return str.length > maxLength ? str.slice(0,maxLength - 1) + "...." : str
+}
+
+
+
