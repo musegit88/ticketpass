@@ -20,7 +20,7 @@ export default async function Home() {
             page={1}
           />
           
-          <ExploreButton label="Find your next event" path="/events"/>
+          <ExploreButton className="mt-4" label="Find your next event" path="/events"/>
         </div>
       </section>
     </>
