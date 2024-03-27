@@ -1,6 +1,6 @@
 import { getOrdersByEvent } from "@/app/actions/order.actons";
 import Search from "@/components/search";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, truncate } from "@/lib/utils";
 import { OrderItem, SearchParamsProps } from "@/types/types";
 
 import moment from "moment";
@@ -10,7 +10,7 @@ const OrdersPage = async ({ searchParams }: SearchParamsProps) => {
   const searchText = (searchParams?.query as string) || "";
 
   const orders = await getOrdersByEvent({ searchText, eventId });
-  console.log(orders);
+
   return (
     <>
       <section className="flex justify-center w-full">
@@ -23,6 +23,7 @@ const OrdersPage = async ({ searchParams }: SearchParamsProps) => {
               <th className="min-w-[250px] text-left py-4">order ID</th>
               <th className="min-w-[200px] text-left py-4">Event Title</th>
               <th className="min-w-[180px] text-left">Buyer</th>
+              <th className="min-w-[180px] text-left">Email</th>
               <th className="min-w-[120px] text-left">Amount</th>
               <th className="min-w-[100px] text-right">Date</th>
             </tr>
@@ -31,7 +32,7 @@ const OrdersPage = async ({ searchParams }: SearchParamsProps) => {
             {orders && orders.length === 0 ? (
               <tr className="border-b">
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="text-center text-muted-foreground py-4"
                 >
                   No orders found.
@@ -40,23 +41,26 @@ const OrdersPage = async ({ searchParams }: SearchParamsProps) => {
             ) : (
               <>
                 {orders &&
-                  orders.map((order: any) => (
+                  orders?.map((order: any) => (
                     <tr
                       key={order.id}
-                      className="text-sm font-normal leading-5 lg:text-base leading-6 border-b"
+                      className="text-sm font-normal leading-5 lg:text-base lg:leading-6 border-b"
                     >
                       <td className="min-w-[250px] py-4">{order.id}</td>
-                      <td className="min-w-[200px] py-4">
-                        {order.event.title}
+                      <td title={order?.event?.title} className="min-w-[200px] py-4">
+                        {truncate(order?.event?.title,40)}
                       </td>
                       <td className="min-w-[180px] py-4">
-                        {order.user.first_name} {order.user.last_name}
+                        {order?.user.first_name} {order?.user.last_name}
+                      </td>
+                      <td className="min-w-[180px] py-4">
+                        {order?.user.email} 
                       </td>
                       <td className="min-w-[120px] py-4">
-                        {formatPrice(order.totalAmount)}
+                        {formatPrice(order?.totalAmount)}
                       </td>
                       <td className="min-w-[100px] py-4 text-right">
-                        {moment(order.createdAt).format("llll")}
+                        {moment(order?.createdAt).format("llll")}
                       </td>
                     </tr>
                   ))}
