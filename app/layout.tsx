@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Ticketpass",
   description: "Ticketpass",
   icons: {
-    icon: "/icons/icon_1.png",
+    icon: "/icons/favicon.png",
   },
 };
 
