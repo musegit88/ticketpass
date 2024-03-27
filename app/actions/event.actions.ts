@@ -323,14 +323,14 @@ export const getRelatedEventsByCategory = async ({
       orderBy: {
         createdAt: "desc",
       },
-      skip: skipAmount,
+      skip: 1,
       take: limit,
     });
 
     const events = await eventsQuery;
     const eventsCount = await prismaDb.event.count({
       where: {
-        // id: eventId,
+        id: eventId,
         categoryId,
       },
     });
