@@ -9,12 +9,30 @@ import moment from "moment";
 import EventsList from "@/components/events-list";
 import { SearchParamsProps } from "@/types/types";
 import CheckoutButton from "@/components/ui/checkout-button";
+import { auth } from "@clerk/nextjs";
+import { getUserById } from "@/app/actions/user.actions";
 
 const EventDetailsPage = async ({
   params: { id },
   searchParams,
 }: SearchParamsProps) => {
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
+
   const event = await getEventById(id);
+  const user = await getUserById(userId);
+
+  const author = event.organizer.id === userId;
+
+  const formatedUser: any[] = user?.order.map((order: any) => ({
+    orderEventId: order.eventId,
+  }));
+
+  const userTicket = formatedUser?.filter(
+    (ticket) => ticket.orderEventId === id
+  );
+
+  const hasTicket =userTicket && userTicket[0]?.orderEventId as string === id;
 
   const relatedEvents = await getRelatedEventsByCategory({
     categoryId: event.category.id,
@@ -30,7 +48,7 @@ const EventDetailsPage = async ({
             alt="event image"
             width={1000}
             height={1000}
-            className="h-full min-h-[300px] object-cover object-center"
+            className="h-full min-h-[300px] object-cover object-center rounded-lg"
           />
           <div className="flex w-full flex-col gap-8 p-5 md:p-10">
             <div className="flex flex-col gap-5">
@@ -60,8 +78,11 @@ const EventDetailsPage = async ({
                 </p>
               </div>
             </div>
-
-            <CheckoutButton event={event} />
+            {author ? (
+              ""
+            ) : (
+              <CheckoutButton event={event} hasTicket={hasTicket} />
+            )}
 
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2 md:gap-4">
