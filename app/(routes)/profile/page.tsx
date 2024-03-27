@@ -21,7 +21,7 @@ const ProfilePage = async ({ searchParams }: SearchParamsProps) => {
       <section>
         <Heading
           title="My Tickets"
-          description="Lorem epsem"
+          description="events with tickets"
           icon={TicketCheck}
         />
         <div>
@@ -42,7 +42,7 @@ const ProfilePage = async ({ searchParams }: SearchParamsProps) => {
       <section className="mt-5">
         <Heading
           title="My Events"
-          description="Lorem epsem"
+          description="created by you"
           icon={ClipboardList}
         />
         <div>
