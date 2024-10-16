@@ -13,7 +13,7 @@ import {
 } from "./alert-dialog";
 import { Trash } from "lucide-react";
 import { deleteEventById } from "@/app/actions/event.actions";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type DeleteModalProps = {
   eventId: string;
@@ -22,13 +22,15 @@ type DeleteModalProps = {
 
 const DeleteModal = ({ eventId, eventName }: DeleteModalProps) => {
   const path = usePathname();
+  const router = useRouter();
   const handleDeleteEvent = () => {
     deleteEventById(eventId, path);
+    router.push("/profile");
   };
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="bg-white rounded-md p-2 shadow-sm transition-all">
-        <Trash size={14} />
+      <AlertDialogTrigger className="bg-white/40 rounded-md p-2 shadow-sm transition-all">
+        <Trash size={14} className="text-red-500" />
       </AlertDialogTrigger>
       <AlertDialogContent className="rounded-md">
         <AlertDialogHeader>
