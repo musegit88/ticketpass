@@ -3,7 +3,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "./button";
 import { addUrlQuery } from "@/lib/utils";
-import { Value } from "@radix-ui/react-select";
 
 type PaginationProps = {
   page: number | string;
@@ -20,7 +19,7 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
 
     const newUrl = addUrlQuery({
       params: searchParams.toString(),
-      key: "page"  || urlParamName,
+      key: "page" || urlParamName,
       value: pageValue.toString(),
     });
     router.push(newUrl, { scroll: false });
