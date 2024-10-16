@@ -1,4 +1,4 @@
-import { getAllEvents } from "@/app/actions/event.actions";
+import { checkArchive, getAllEvents } from "@/app/actions/event.actions";
 import CategoryFilter from "@/components/category-filter";
 import EventsList from "@/components/events-list";
 import Search from "@/components/search";
@@ -14,8 +14,9 @@ const eventsPage = async ({ searchParams }: SearchParamsProps) => {
     page,
     limit: 6,
   });
+  const archive = await checkArchive();
   return (
-    <div >
+    <div>
       <div className="flex flex-col items-center w-full gap-4 mb-4 md:flex-row">
         <Search />
         <CategoryFilter />
