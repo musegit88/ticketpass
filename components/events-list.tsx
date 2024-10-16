@@ -1,6 +1,5 @@
 import { EventProps } from "@/types/types";
 import EventCard from "./ui/event-card";
-import { Button } from "./ui/button";
 import GoTo from "./ui/go-to";
 import Pagination from "./ui/pagination";
 
@@ -39,21 +38,25 @@ const EventsList = ({
 
               return (
                 <li key={event.id} className="flex justify-center">
-                  <EventCard
-                    event={event}
-                    hasOrderLink={hasOrderLink}
-                    hidePrice={hidePrice}
-                  />
+                  {!event.isArchived && (
+                    <EventCard
+                      event={event}
+                      hasOrderLink={hasOrderLink}
+                      hidePrice={hidePrice}
+                    />
+                  )}
                 </li>
               );
             })}
           </ul>
           {totalPages > 1 && (
-            <Pagination
-              urlParamName={urlParamName}
-              page={page}
-              totalPages={totalPages}
-            />
+            <div className="">
+              <Pagination
+                urlParamName={urlParamName}
+                page={page}
+                totalPages={totalPages}
+              />
+            </div>
           )}
         </div>
       ) : (
