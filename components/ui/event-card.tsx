@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { EventProps } from "@/types/types";
 import { auth } from "@clerk/nextjs";
-import { ArrowRight, Edit } from "lucide-react";
+import { Archive, ArrowRight, Edit } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import DeleteModal from "./deleteModal";
@@ -18,7 +18,7 @@ const EventCard = ({ event, hasOrderLink, hidePrice }: EventCardProps) => {
   const isEventOrganizer = userId === event.organizer?.id;
   const hasEventEnded = new Date(event.endTime) < new Date();
   return (
-    <div className="group relative flex flex-col w-full max-w-[400px] min-h-[380px] md:min-h-[438px] shadow-md overflow-hidden rounded-xl transition-all hover:shadow-lg">
+    <div className="group relative flex flex-col w-full max-w-[400px] min-h-[380px] md:min-h-[438px] shadow-md overflow-hidden rounded-xl transition-all hover:shadow-lg dark:border">
       <Link
         href={`/events/${event.id}`}
         style={{ backgroundImage: ` url(${event.imageUrl})` }}
@@ -28,11 +28,20 @@ const EventCard = ({ event, hasOrderLink, hidePrice }: EventCardProps) => {
         <div className="absolute top-2 right-2 flex flex-col gap-4 ">
           <Link
             href={`/events/${event.id}/update`}
-            className="bg-white rounded-md p-2 shadow-sm transition-all"
+            className="bg-white/40 rounded-md p-2 shadow-sm transition-all"
+            title="Update"
           >
-            <Edit size={14} />
+            <Edit size={14} className="text-green-500" />
           </Link>
           <DeleteModal eventId={event.id} eventName={event.title} />
+          {event.isArchived && (
+            <div
+              className="bg-white/40 rounded-md p-2 shadow-sm transition-all"
+              title="Archived"
+            >
+              <Archive size={14} />
+            </div>
+          )}
         </div>
       )}
       <div className="flex flex-col min-h-[180px] gap-3 md:gap-4 p-5 ">
