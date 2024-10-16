@@ -32,6 +32,7 @@ model Event {
   userId      String   @db.ObjectId
   title       String
   description String
+  isArchived  Boolean  @default(false)
   location    String
   isOnline    Boolean
   imageUrl    String

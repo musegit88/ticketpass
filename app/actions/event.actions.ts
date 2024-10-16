@@ -187,8 +187,7 @@ export const getAllEvents = async ({
       take: limit,
     });
 
-
-    //search event 
+    //search event
     const searchedEvent: any = await prismaDb.event.findRaw({
       filter: { title: { $regex: query } },
       options: {
@@ -419,4 +418,15 @@ export const getNewEvents = async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const checkArchive = async () => {
+  await prismaDb.event.updateMany({
+    where: {
+      endTime: { lt: new Date() },
+    },
+    data: {
+      isArchived: true,
+    },
+  });
 };
