@@ -3,7 +3,7 @@ import {
   getRelatedEventsByCategory,
 } from "@/app/actions/event.actions";
 import { cn } from "@/lib/utils";
-import { CalendarDays, Laptop, MapPinIcon } from "lucide-react";
+import { CalendarDays, Edit, Laptop, MapPinIcon } from "lucide-react";
 import Image from "next/image";
 import moment from "moment";
 import EventsList from "@/components/events-list";
@@ -11,6 +11,8 @@ import { SearchParamsProps } from "@/types/types";
 import CheckoutButton from "@/components/ui/checkout-button";
 import { auth } from "@clerk/nextjs";
 import { getUserById } from "@/app/actions/user.actions";
+import DeleteModal from "@/components/ui/deleteModal";
+import Link from "next/link";
 
 const EventDetailsPage = async ({
   params: { id },
@@ -32,7 +34,8 @@ const EventDetailsPage = async ({
     (ticket) => ticket.orderEventId === id
   );
 
-  const hasTicket =userTicket && userTicket[0]?.orderEventId as string === id;
+  const hasTicket =
+    userTicket && (userTicket[0]?.orderEventId as string) === id;
 
   const relatedEvents = await getRelatedEventsByCategory({
     categoryId: event.category.id,
@@ -43,13 +46,26 @@ const EventDetailsPage = async ({
     <>
       <section className="flex justify-center bg-contain">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
-          <Image
-            src={event?.imageUrl}
-            alt="event image"
-            width={1000}
-            height={1000}
-            className="h-full min-h-[300px] object-cover object-center rounded-lg"
-          />
+          <div className="relative">
+            <Image
+              src={event?.imageUrl}
+              alt="event image"
+              width={1000}
+              height={1000}
+              className="h-full min-h-[300px] object-cover object-center rounded-lg"
+            />
+            {author && (
+              <div className="absolute top-2 right-2 flex flex-col gap-4 ">
+                <Link
+                  href={`/events/${event.id}/update`}
+                  className="bg-white/40 rounded-md p-2 shadow-sm transition-all"
+                >
+                  <Edit size={14} className="text-green-500" />
+                </Link>
+                <DeleteModal eventId={event.id} eventName={event.title} />
+              </div>
+            )}
+          </div>
           <div className="flex w-full flex-col gap-8 p-5 md:p-10">
             <div className="flex flex-col gap-5">
               <h2 className="capitalize font-bold text-3xl leading-[40px] lg:text-4xl lg:leading-[60px] xl:text-6xl xl:leading-[74px]">
