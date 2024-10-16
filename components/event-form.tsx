@@ -18,7 +18,7 @@ import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import Listbox from "./ui/listbox";
 import ImageUploader from "./ui/image-uploader";
-import { CalendarRange, DollarSign, Link, MapPin } from "lucide-react";
+import { CalendarRange, DollarSign, Link, Loader2, MapPin } from "lucide-react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -86,6 +86,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         });
         if (newEvent) {
           form.reset();
+          router.refresh();
           router.push(`/events/${newEvent.id}`);
         }
       } catch (error) {
@@ -112,7 +113,6 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         console.log(error);
       }
     }
-
   };
 
   return (
@@ -161,11 +161,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl className="h-72">
-                  <Textarea
-                    placeholder=""
-                    {...field}
-                    className="resize-none"
-                  />
+                  <Textarea placeholder="" {...field} className="resize-none" />
                 </FormControl>
                 <FormDescription>Description for your event.</FormDescription>
                 <FormMessage />
@@ -360,8 +356,16 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           </div>
         </div>
         <div className="">
-          <Button type="submit" size="lg" disabled={form.formState.isSubmitted}>
-            {form.formState.isSubmitted ? "Submitting"  : `${type} Event`}
+          <Button
+            type="submit"
+            size="lg"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              `${type} Event`
+            )}
           </Button>
         </div>
       </form>
@@ -370,4 +374,3 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 };
 
 export default EventForm;
-
