@@ -1,6 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { EventProps } from "@/types/types";
-import { auth } from "@clerk/nextjs";
 import { Archive, ArrowRight, Edit } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
@@ -10,11 +11,15 @@ type EventCardProps = {
   event: EventProps;
   hasOrderLink?: boolean;
   hidePrice?: boolean;
+  userId: string;
 };
 
-const EventCard = ({ event, hasOrderLink, hidePrice }: EventCardProps) => {
-  const { sessionClaims } = auth();
-  const userId = sessionClaims?.userId as string;
+const EventCard = ({
+  event,
+  hasOrderLink,
+  hidePrice,
+  userId,
+}: EventCardProps) => {
   const isEventOrganizer = userId === event.organizer?.id;
   const hasEventEnded = new Date(event.endTime) < new Date();
   return (

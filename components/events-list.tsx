@@ -1,7 +1,14 @@
+"use client";
+
 import { EventProps } from "@/types/types";
 import EventCard from "./ui/event-card";
 import GoTo from "./ui/go-to";
 import Pagination from "./ui/pagination";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { getUserByClerkId } from "@/app/actions/user.actions";
+import { useAuth } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
 
 type EventListProps = {
   data: EventProps[];
@@ -27,6 +34,19 @@ const EventsList = ({
   totalPages = 0,
   urlParamName,
 }: EventListProps) => {
+  const path = usePathname();
+  const [userId, setUserId] = useState("");
+
+  const { userId: clerkId } = useAuth();
+
+  useEffect(() => {
+    const fetchUserClerckId = async () => {
+      const user = await getUserByClerkId(clerkId!);
+      setUserId(user);
+    };
+    fetchUserClerckId();
+  }, []);
+
   return (
     <>
       {data?.length > 0 ? (
@@ -37,14 +57,19 @@ const EventsList = ({
               const hidePrice = eventsListType === "My_tickets";
 
               return (
-                <li key={event.id} className="flex justify-center">
-                  {!event.isArchived && (
-                    <EventCard
-                      event={event}
-                      hasOrderLink={hasOrderLink}
-                      hidePrice={hidePrice}
-                    />
+                <li
+                  key={event.id}
+                  className={cn(
+                    "flex justify-center",
+                    event.isArchived && path !== "/profile" && "hidden"
                   )}
+                >
+                  <EventCard
+                    event={event}
+                    hasOrderLink={hasOrderLink}
+                    hidePrice={hidePrice}
+                    userId={userId}
+                  />
                 </li>
               );
             })}
