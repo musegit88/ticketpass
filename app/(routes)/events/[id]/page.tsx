@@ -45,14 +45,14 @@ const EventDetailsPage = async ({
   return (
     <>
       <section className="flex justify-center bg-contain">
-        <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
+        <div className="grid grid-cols-1 2xl:max-w-7xl">
           <div className="relative">
             <Image
               src={event?.imageUrl}
               alt="event image"
               width={1000}
               height={1000}
-              className="h-full min-h-[300px] object-cover object-center rounded-lg"
+              className="w-full h-full min-h-[300px] object-cover object-center rounded-lg"
             />
             {author && (
               <div className="absolute top-2 right-2 flex flex-col gap-4 ">
