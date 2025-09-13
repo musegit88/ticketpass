@@ -58,6 +58,7 @@ export type UpdateEventProps = {
     categoryId: string;
     description: string;
     location: string;
+    isOnline: boolean;
     imageUrl: string;
     isFree: boolean;
     price: string;
