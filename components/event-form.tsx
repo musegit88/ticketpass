@@ -194,7 +194,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
-                    <div className="flex items-center w-full overflow-hidden rounded-md bg-slate-400/20 px-2">
+                    <div className="flex items-center w-full overflow-hidden rounded-l-md bg-slate-400/20 px-2">
                       <MapPin size={18} />
                       <Input
                         placeholder="New York, USA"
